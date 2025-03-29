@@ -7,7 +7,7 @@ from sqlalchemy.ext.asyncio import AsyncSession, create_async_engine
 from sqlalchemy.orm import sessionmaker
 
 from main import app
-from app.core.db import Base
+from app.core.db import Base, get_async_session
 
 
 TEST_DATABASE_URL = "sqlite+aiosqlite:///:memory:"
@@ -33,6 +33,14 @@ async def db_session():
     async with TestAsynсSession() as session:
         yield session
         await session.rollback()
+
+
+@pytest_asyncio.fixture(scope="function", autouse=True)
+async def override_get_async_session(db_session: AsyncSession):
+    """Override FastAPI Depends on get_async_session to test_db_session."""
+    app.dependency_overrides[get_async_session] = lambda: db_session
+    yield
+    app.dependency_overrides.clear()
 
 
 @pytest_asyncio.fixture(scope="session")
