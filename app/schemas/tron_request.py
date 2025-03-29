@@ -1,5 +1,5 @@
 from datetime import datetime
-from typing import Sequence, Any
+from typing import Sequence
 
 from pydantic import BaseModel, Field, field_validator
 

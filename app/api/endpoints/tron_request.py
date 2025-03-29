@@ -52,7 +52,10 @@ async def get_all_tron_requests(
         offset=offset
     )
     result = {
-        "items": [tron_request.TronRequestDB.model_validate(obj) for obj in db_objects],
+        "items": [
+            tron_request.TronRequestDB.model_validate(obj)
+            for obj in db_objects
+        ],
         "limit": limit,
         "offset": offset
     }
